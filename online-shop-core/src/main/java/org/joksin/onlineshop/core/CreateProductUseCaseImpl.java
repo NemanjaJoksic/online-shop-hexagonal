@@ -5,9 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.joksin.onlineshop.api.CreateProductUseCase;
 import org.joksin.onlineshop.api.request.CreateProductRequest;
 import org.joksin.onlineshop.core.util.DateTimeUtil;
+import org.joksin.onlineshop.core.validator.ManufacturerValidator;
+import org.joksin.onlineshop.core.validator.ProductValidator;
 import org.joksin.onlineshop.model.Manufacturer;
 import org.joksin.onlineshop.model.Product;
-import org.joksin.onlineshop.model.exception.ProductExistsException;
 import org.joksin.onlineshop.spi.persistence.ProductRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,17 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class CreateProductUseCaseImpl implements CreateProductUseCase {
 
     private final ProductRepository productRepository;
+    private final ManufacturerValidator manufacturerValidator;
+    private final ProductValidator productValidator;
 
     @Override
     @Transactional
     public Product create(CreateProductRequest createProductRequest) {
 
-        String productName = createProductRequest.getName();
-        Integer manufacturerId = createProductRequest.getManufacturerId();
-
-        if (productRepository.existsByNameAndManufacturerId(productName, manufacturerId)) {
-            throw new ProductExistsException(productName, manufacturerId);
-        }
+        manufacturerValidator.validateManufacturerExists(createProductRequest.getManufacturerId());
+        productValidator.validateProductNotExist(createProductRequest.getName(), createProductRequest.getManufacturerId());
 
         Product product = Product.builder()
                 .name(createProductRequest.getName())

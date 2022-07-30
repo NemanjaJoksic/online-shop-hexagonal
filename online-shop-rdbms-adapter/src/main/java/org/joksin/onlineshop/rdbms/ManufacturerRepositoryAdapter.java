@@ -35,6 +35,11 @@ public class ManufacturerRepositoryAdapter implements ManufacturerRepository {
     }
 
     @Override
+    public Boolean existsById(Integer manufacturerId) {
+        return manufacturerCrudRepository.existsById(manufacturerId);
+    }
+
+    @Override
     public Boolean existsByName(String manufacturerName) {
         return manufacturerCrudRepository.existsByName(manufacturerName);
     }

@@ -3,6 +3,7 @@ package org.joksin.onlineshop.restapi.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.joksin.onlineshop.model.exception.CountryNotExistException;
 import org.joksin.onlineshop.model.exception.ManufacturerExistsException;
+import org.joksin.onlineshop.model.exception.ManufacturerNotExistException;
 import org.joksin.onlineshop.model.exception.ProductExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +16,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {
             ManufacturerExistsException.class,
+            ManufacturerNotExistException.class,
             CountryNotExistException.class,
             ProductExistsException.class
     })
-    public ResponseEntity<ApiErrorResponse> handleBadRequestException(Throwable t) {
+    public ResponseEntity<ApiErrorResponse> handleConflictException(Throwable t) {
         log.info(t.getMessage());
-        return new ResponseEntity<>(ApiErrorResponse.of(t.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ApiErrorResponse.of(t.getMessage(), HttpStatus.CONFLICT), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(Throwable.class)

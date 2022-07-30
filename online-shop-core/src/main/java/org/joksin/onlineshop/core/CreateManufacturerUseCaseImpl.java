@@ -3,8 +3,8 @@ package org.joksin.onlineshop.core;
 import lombok.AllArgsConstructor;
 import org.joksin.onlineshop.api.CreateManufacturerUseCase;
 import org.joksin.onlineshop.api.request.CreateManufacturerRequest;
+import org.joksin.onlineshop.core.validator.ManufacturerValidator;
 import org.joksin.onlineshop.model.Manufacturer;
-import org.joksin.onlineshop.model.exception.ManufacturerExistsException;
 import org.joksin.onlineshop.spi.persistence.ManufacturerRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,15 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class CreateManufacturerUseCaseImpl implements CreateManufacturerUseCase {
 
     private final ManufacturerRepository manufacturerRepository;
+    private final ManufacturerValidator manufacturerValidator;
 
     @Override
     @Transactional
     public Manufacturer create(CreateManufacturerRequest createManufacturerRequest) {
 
-        String manufacturerName = createManufacturerRequest.getName();
-        if(manufacturerRepository.existsByName(manufacturerName)) {
-            throw new ManufacturerExistsException(manufacturerName);
-        }
+        manufacturerValidator.validateManufacturerNotExist(createManufacturerRequest.getName());
 
         Manufacturer manufacturer = Manufacturer.builder()
                 .name(createManufacturerRequest.getName())
