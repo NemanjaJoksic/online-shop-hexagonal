@@ -16,6 +16,8 @@ public interface ProductRepository {
 
     Collection<Product> findAllByManufacturerId(Integer manufacturerId);
 
+    Boolean existsByNameAndManufacturerId(String productName, Integer manufacturerId);
+
     Product create(Product product);
 
     Product changePrice(Integer productId, double newPrice);

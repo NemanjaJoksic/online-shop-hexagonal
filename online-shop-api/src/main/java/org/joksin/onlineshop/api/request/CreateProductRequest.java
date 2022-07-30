@@ -9,7 +9,7 @@ import org.joksin.onlineshop.model.ProductType;
 public class CreateProductRequest {
 
     private String name;
-    private ProductType type;
+    private ProductType productType;
     private Double price;
     private Integer manufacturerId;
 

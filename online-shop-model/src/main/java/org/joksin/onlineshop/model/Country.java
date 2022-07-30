@@ -2,7 +2,7 @@ package org.joksin.onlineshop.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.joksin.onlineshop.model.exception.CountryIdNotExistException;
+import org.joksin.onlineshop.model.exception.CountryNotExistException;
 
 @Getter
 @AllArgsConstructor
@@ -20,7 +20,7 @@ public enum Country {
             case 1: return SERBIA;
             case 2: return MONTENEGRO;
             default:
-                throw new CountryIdNotExistException(id);
+                throw new CountryNotExistException(id);
         }
     }
 

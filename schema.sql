@@ -25,7 +25,7 @@ CREATE TABLE "product" (
 	"name"	TEXT NOT NULL,
 	"type_id"	INTEGER NOT NULL,
 	"price"	REAL NOT NULL,
-	"last_updated"	TEXT NOT NULL,
+	"last_updated"	TIMESTAMP NOT NULL,
 	"manufacturer_id"	INTEGER NOT NULL,
 	PRIMARY KEY("id")
 );
