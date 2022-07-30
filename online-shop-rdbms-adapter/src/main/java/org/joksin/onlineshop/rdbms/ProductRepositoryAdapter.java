@@ -46,6 +46,11 @@ public class ProductRepositoryAdapter implements ProductRepository {
     }
 
     @Override
+    public Boolean existsById(Integer productId) {
+        return productCrudRepository.existsById(productId);
+    }
+
+    @Override
     public Boolean existsByNameAndManufacturerId(String productName, Integer manufacturerId) {
         return productCrudRepository.existsByNameAndManufacturerId(productName, manufacturerId);
     }
@@ -58,7 +63,17 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
     @Override
     public Product changePrice(Integer productId, double newPrice) {
-        return null;
+        Integer rowsUpdated = productCrudRepository.updatePriceById(newPrice, productId);
+        if (rowsUpdated != 1) {
+            throw new RuntimeException("Unexpected number of row(s) updated. Expected to have 1 row updated, but was " + rowsUpdated);
+        }
+
+        Optional<Product> updatedProductOptional = findById(productId);
+        if (updatedProductOptional.isPresent()) {
+            return updatedProductOptional.get();
+        } else {
+            throw new RuntimeException("Inconsistent data: product with ID " + productId + " must exist in the database");
+        }
     }
 
     private Collection<Product> mapWithManufacturer(Collection<ProductEntity> productEntities) {

@@ -8,9 +8,9 @@ import org.joksin.onlineshop.model.ProductType;
 @Builder
 public class CreateProductRequest {
 
-    private String name;
-    private ProductType productType;
-    private Double price;
-    private Integer manufacturerId;
+    private final String name;
+    private final ProductType productType;
+    private final Double price;
+    private final Integer manufacturerId;
 
 }
