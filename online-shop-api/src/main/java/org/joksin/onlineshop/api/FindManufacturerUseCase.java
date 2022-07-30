@@ -8,6 +8,6 @@ public interface FindManufacturerUseCase {
 
     Optional<Manufacturer> findById(Integer manufacturerId);
 
-    Optional<Manufacturer> findByName(String name);
+    Optional<Manufacturer> findByName(String manufacturerName);
 
 }
