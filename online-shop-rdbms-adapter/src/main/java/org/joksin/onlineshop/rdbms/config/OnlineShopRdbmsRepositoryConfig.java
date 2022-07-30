@@ -12,5 +12,5 @@ import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
         ManufacturerRepositoryAdapter.class
 })
 @EnableJdbcRepositories(basePackages = "org.joksin.onlineshop.rdbms")
-public class RdbmsRepositoryConfig {
+public class OnlineShopRdbmsRepositoryConfig {
 }
