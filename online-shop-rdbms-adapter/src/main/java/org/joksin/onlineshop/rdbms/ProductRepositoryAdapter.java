@@ -3,42 +3,46 @@ package org.joksin.onlineshop.rdbms;
 import lombok.AllArgsConstructor;
 import org.joksin.onlineshop.model.Product;
 import org.joksin.onlineshop.model.ProductType;
+import org.joksin.onlineshop.rdbms.entity.ManufacturerEntity;
 import org.joksin.onlineshop.rdbms.entity.ProductEntity;
 import org.joksin.onlineshop.rdbms.mapper.ProductMapper;
+import org.joksin.onlineshop.rdbms.repository.ManufacturerCrudRepository;
 import org.joksin.onlineshop.rdbms.repository.ProductCrudRepository;
 import org.joksin.onlineshop.spi.persistence.ProductRepository;
 import org.springframework.data.util.Streamable;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class ProductRepositoryAdapter implements ProductRepository {
 
     private final ProductCrudRepository productCrudRepository;
+    private final ManufacturerCrudRepository manufacturerCrudRepository;
 
     @Override
     public Optional<Product> findById(Integer productId) {
         return productCrudRepository.findById(productId)
-                .map(ProductMapper.MAPPER::fromEntity);
+                .map(this::mapWithManufacturer);
     }
 
     @Override
     public Collection<Product> findAll() {
         Collection<ProductEntity> productEntities = Streamable.of(productCrudRepository.findAll()).toList();
-        return ProductMapper.MAPPER.fromEntities(productEntities);
+        return mapWithManufacturer(productEntities);
     }
 
     @Override
     public Collection<Product> findAllByType(ProductType productType) {
         Collection<ProductEntity> productEntities = Streamable.of(productCrudRepository.findAll()).toList();
-        return ProductMapper.MAPPER.fromEntities(productEntities);
+        return mapWithManufacturer(productEntities);
     }
 
     @Override
     public Collection<Product> findAllByManufacturerId(Integer manufacturerId) {
         Collection<ProductEntity> productEntities = Streamable.of(productCrudRepository.findAll()).toList();
-        return ProductMapper.MAPPER.fromEntities(productEntities);
+        return mapWithManufacturer(productEntities);
     }
 
     @Override
@@ -49,12 +53,27 @@ public class ProductRepositoryAdapter implements ProductRepository {
     @Override
     public Product create(Product product) {
         ProductEntity createdProductEntity = productCrudRepository.save(ProductMapper.MAPPER.toEntity(product));
-        return ProductMapper.MAPPER.fromEntity(createdProductEntity);
+        return mapWithManufacturer(createdProductEntity);
     }
 
     @Override
     public Product changePrice(Integer productId, double newPrice) {
         return null;
+    }
+
+    private Collection<Product> mapWithManufacturer(Collection<ProductEntity> productEntities) {
+        return productEntities.stream()
+                .map(this::mapWithManufacturer)
+                .collect(Collectors.toList());
+    }
+
+    private Product mapWithManufacturer(ProductEntity productEntity) {
+        Optional<ManufacturerEntity> manufacturerEntityOptional = manufacturerCrudRepository.findById(productEntity.getManufacturerId());
+        if (manufacturerEntityOptional.isPresent()) {
+            return ProductMapper.MAPPER.fromEntity(productEntity, manufacturerEntityOptional.get());
+        } else {
+            throw new RuntimeException("Inconsistent data: manufacturer with ID " + productEntity.getManufacturerId() + " must exist in the database");
+        }
     }
 
 }
