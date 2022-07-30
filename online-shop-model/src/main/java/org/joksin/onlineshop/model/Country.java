@@ -1,7 +1,9 @@
 package org.joksin.onlineshop.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public enum Country {
 

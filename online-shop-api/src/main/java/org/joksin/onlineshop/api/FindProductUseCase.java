@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface FindProductUseCase {
 
-    Optional<Product> findProductById(Integer productId);
+    Optional<Product> findById(Integer productId);
 
 }

@@ -42,7 +42,7 @@ public class ProductController {
 
     @GetMapping("/api/products/{productId}")
     public ResponseEntity<ProductDTO> findById(@PathVariable Integer productId) {
-        Optional<Product> productOptional = findProductUseCase.findProductById(productId);
+        Optional<Product> productOptional = findProductUseCase.findById(productId);
         return productOptional.map(product -> new ResponseEntity<>(ProductMapper.MAPPER.toDTO(product), HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }

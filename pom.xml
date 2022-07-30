@@ -19,9 +19,11 @@
     <modules>
         <module>online-shop-model</module>
         <module>online-shop-api</module>
-        <module>application</module>
+        <module>online-shop-spi</module>
         <module>online-shop-core</module>
         <module>online-shop-restapi-adapter</module>
+        <module>application</module>
+        <module>online-shop-rdbms-adapter</module>
     </modules>
 	
     <properties>
@@ -51,6 +53,11 @@
             <dependency>
                 <groupId>org.joksin</groupId>
                 <artifactId>online-shop-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.joksin</groupId>
+                <artifactId>online-shop-spi</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
