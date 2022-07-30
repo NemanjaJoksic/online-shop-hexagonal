@@ -14,4 +14,13 @@ public enum Country {
     private final String name;
     private final String isoCode;
 
+    public static Country of(Integer id) {
+        switch (id) {
+            case 1: return SERBIA;
+            case 2: return MONTENEGRO;
+            default:
+                throw new RuntimeException("");
+        }
+    }
+
 }

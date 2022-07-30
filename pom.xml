@@ -30,10 +30,19 @@
         <java.version>11</java.version>
         <lombok.version>1.18.24</lombok.version>
         <mapstruct.version>1.5.2.Final</mapstruct.version>
+        <sqlite.driver.version>3.36.0.3</sqlite.driver.version>
+        <postgres.driver.version>42.4.0</postgres.driver.version>
+        <springdoc.version>1.6.9</springdoc.version>
     </properties>
 	
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
@@ -43,6 +52,16 @@
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
                 <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.xerial</groupId>
+                <artifactId>sqlite-jdbc</artifactId>
+                <version>${sqlite.driver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgres.driver.version}</version>
             </dependency>
 
             <dependency>
@@ -68,6 +87,11 @@
             <dependency>
                 <groupId>org.joksin</groupId>
                 <artifactId>online-shop-restapi-adapter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.joksin</groupId>
+                <artifactId>online-shop-rdbms-adapter</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
