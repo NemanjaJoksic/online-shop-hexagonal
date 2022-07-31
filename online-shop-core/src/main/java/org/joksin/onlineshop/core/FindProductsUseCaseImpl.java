@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joksin.onlineshop.api.FindProductsUseCase;
 import org.joksin.onlineshop.model.Product;
+import org.joksin.onlineshop.model.filter.SearchProductsFilter;
 import org.joksin.onlineshop.spi.persistence.ProductRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +18,9 @@ public class FindProductsUseCaseImpl implements FindProductsUseCase {
 
     @Override
     @Transactional(readOnly = true)
-    public Collection<Product> findAll() {
-        return productRepository.findAll();
+    public Collection<Product> findAll(SearchProductsFilter searchProductsFilter) {
+        log.info("Searching products using filter: {}", searchProductsFilter);
+        return productRepository.findAll(searchProductsFilter);
     }
 
     @Override

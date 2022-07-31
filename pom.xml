@@ -22,8 +22,8 @@
         <module>online-shop-spi</module>
         <module>online-shop-core</module>
         <module>online-shop-restapi-adapter</module>
-        <module>application</module>
         <module>online-shop-rdbms-adapter</module>
+        <module>application</module>
     </modules>
 	
     <properties>

@@ -2,6 +2,7 @@ package org.joksin.onlineshop.rdbms;
 
 import lombok.AllArgsConstructor;
 import org.joksin.onlineshop.model.Product;
+import org.joksin.onlineshop.model.filter.SearchProductsFilter;
 import org.joksin.onlineshop.rdbms.entity.ProductEntity;
 import org.joksin.onlineshop.rdbms.mapper.ProductMapper;
 import org.joksin.onlineshop.rdbms.repository.ManufacturerCrudRepository;
@@ -26,7 +27,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
     }
 
     @Override
-    public Collection<Product> findAll() {
+    public Collection<Product> findAll(SearchProductsFilter searchProductsFilter) {
         Collection<ProductEntity> productEntities = Streamable.of(productCrudRepository.findAll()).toList();
         return toProductsWithManufacturer(productEntities);
     }

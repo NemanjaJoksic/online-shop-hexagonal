@@ -9,9 +9,11 @@ import org.joksin.onlineshop.model.Product;
 import org.joksin.onlineshop.restapi.dto.ChangeProductPriceRequestDTO;
 import org.joksin.onlineshop.restapi.dto.CreateProductRequestDTO;
 import org.joksin.onlineshop.restapi.dto.ProductDTO;
+import org.joksin.onlineshop.restapi.dto.SearchProductsFilterDTO;
 import org.joksin.onlineshop.restapi.mapper.ChangeProductPriceRequestMapper;
 import org.joksin.onlineshop.restapi.mapper.CreateProductRequestMapper;
 import org.joksin.onlineshop.restapi.mapper.ProductMapper;
+import org.joksin.onlineshop.restapi.mapper.SearchProductsFilterMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,8 +43,8 @@ public class ProductController {
     }
 
     @GetMapping("/api/products")
-    public ResponseEntity<Collection<ProductDTO>> findAll() {
-        Collection<Product> products = findProductsUseCase.findAll();
+    public ResponseEntity<Collection<ProductDTO>> findAll(SearchProductsFilterDTO searchProductsFilterDto) {
+        Collection<Product> products = findProductsUseCase.findAll(SearchProductsFilterMapper.MAPPER.fromDTO(searchProductsFilterDto));
         if (!products.isEmpty()) {
             return new ResponseEntity<>(ProductMapper.MAPPER.toDTOs(products), HttpStatus.OK);
         } else {
