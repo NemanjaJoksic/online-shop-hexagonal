@@ -29,12 +29,6 @@ public class ManufacturerRepositoryAdapter implements ManufacturerRepository {
     }
 
     @Override
-    public Optional<Manufacturer> findByName(String manufacturerName) {
-        return manufacturerCrudRepository.findByName(manufacturerName)
-                .map(ManufacturerMapper.MAPPER::fromEntity);
-    }
-
-    @Override
     public Boolean existsById(Integer manufacturerId) {
         return manufacturerCrudRepository.existsById(manufacturerId);
     }

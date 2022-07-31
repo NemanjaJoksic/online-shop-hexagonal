@@ -8,6 +8,4 @@ public interface FindCustomerUseCase {
 
     Optional<Customer> findById(Integer customerId);
 
-    Optional<Customer> findByEmail(String email);
-
 }

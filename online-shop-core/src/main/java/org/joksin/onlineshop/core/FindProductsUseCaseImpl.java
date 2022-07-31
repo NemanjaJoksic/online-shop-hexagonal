@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joksin.onlineshop.api.FindProductsUseCase;
 import org.joksin.onlineshop.model.Product;
-import org.joksin.onlineshop.model.ProductType;
 import org.joksin.onlineshop.spi.persistence.ProductRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Collections;
 
 @Slf4j
 @AllArgsConstructor
@@ -21,12 +19,6 @@ public class FindProductsUseCaseImpl implements FindProductsUseCase {
     @Transactional(readOnly = true)
     public Collection<Product> findAll() {
         return productRepository.findAll();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Collection<Product> findAllByType(ProductType productType) {
-        return productRepository.findAllByType(productType);
     }
 
     @Override

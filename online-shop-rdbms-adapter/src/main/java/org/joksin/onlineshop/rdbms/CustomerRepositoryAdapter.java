@@ -23,12 +23,6 @@ public class CustomerRepositoryAdapter implements CustomerRepository {
     }
 
     @Override
-    public Optional<Customer> findByEmail(String email) {
-        return customerCrudRepository.findByEmail(email)
-                .map(CustomerMapper.MAPPER::fromEntity);
-    }
-
-    @Override
     public Collection<Customer> findAll() {
         Collection<CustomerEntity> customerEntities = Streamable.of(customerCrudRepository.findAll()).toList();
         return CustomerMapper.MAPPER.fromEntities(customerEntities);

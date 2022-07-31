@@ -19,10 +19,4 @@ public class FindManufacturerUseCaseImpl implements FindManufacturerUseCase {
         return manufacturerRepository.findById(manufacturerId);
     }
 
-    @Override
-    @Transactional (readOnly = true)
-    public Optional<Manufacturer> findByName(String manufacturerName) {
-        return manufacturerRepository.findByName(manufacturerName);
-    }
-
 }

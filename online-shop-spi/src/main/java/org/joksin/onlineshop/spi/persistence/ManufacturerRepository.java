@@ -11,8 +11,6 @@ public interface ManufacturerRepository {
 
     Optional<Manufacturer> findById(Integer manufacturerId);
 
-    Optional<Manufacturer> findByName(String manufacturerName);
-
     Boolean existsById(Integer manufacturerId);
 
     Boolean existsByName(String manufacturerName);

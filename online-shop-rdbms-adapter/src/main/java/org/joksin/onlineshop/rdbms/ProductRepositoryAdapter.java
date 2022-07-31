@@ -2,7 +2,6 @@ package org.joksin.onlineshop.rdbms;
 
 import lombok.AllArgsConstructor;
 import org.joksin.onlineshop.model.Product;
-import org.joksin.onlineshop.model.ProductType;
 import org.joksin.onlineshop.rdbms.entity.ProductEntity;
 import org.joksin.onlineshop.rdbms.mapper.ProductMapper;
 import org.joksin.onlineshop.rdbms.repository.ManufacturerCrudRepository;
@@ -28,12 +27,6 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
     @Override
     public Collection<Product> findAll() {
-        Collection<ProductEntity> productEntities = Streamable.of(productCrudRepository.findAll()).toList();
-        return toProductsWithManufacturer(productEntities);
-    }
-
-    @Override
-    public Collection<Product> findAllByType(ProductType productType) {
         Collection<ProductEntity> productEntities = Streamable.of(productCrudRepository.findAll()).toList();
         return toProductsWithManufacturer(productEntities);
     }
