@@ -1,10 +1,10 @@
 package org.joksin.onlineshop.core;
 
+import commons.DateTimeUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joksin.onlineshop.api.CreateProductUseCase;
 import org.joksin.onlineshop.api.request.CreateProductRequest;
-import org.joksin.onlineshop.core.util.DateTimeUtil;
 import org.joksin.onlineshop.core.validator.ManufacturerValidator;
 import org.joksin.onlineshop.core.validator.ProductValidator;
 import org.joksin.onlineshop.model.Manufacturer;

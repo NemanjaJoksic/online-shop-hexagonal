@@ -1,4 +1,4 @@
-package org.joksin.onlineshop.core.util;
+package commons;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

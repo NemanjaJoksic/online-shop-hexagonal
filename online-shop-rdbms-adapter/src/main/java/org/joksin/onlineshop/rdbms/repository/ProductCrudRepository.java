@@ -5,6 +5,7 @@ import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 public interface ProductCrudRepository extends CrudRepository<ProductEntity, Integer> {
@@ -14,7 +15,7 @@ public interface ProductCrudRepository extends CrudRepository<ProductEntity, Int
     Boolean existsByNameAndManufacturerId(String name, Integer manufacturerId);
 
     @Modifying
-    @Query(value = "update product set price = :newPrice, last_updated = timezone('utc', now())::timestamp where id = :productId")
-    Integer updatePriceById(Double newPrice, Integer productId);
+    @Query(value = "update product set price = :newPrice, last_updated = :currentUtcTs where id = :productId")
+    Integer updatePriceById(Double newPrice, LocalDateTime currentUtcTs, Integer productId);
 
 }

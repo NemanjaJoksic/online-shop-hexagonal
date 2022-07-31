@@ -1,5 +1,6 @@
 package org.joksin.onlineshop.rdbms;
 
+import commons.DateTimeUtil;
 import lombok.AllArgsConstructor;
 import org.joksin.onlineshop.model.Product;
 import org.joksin.onlineshop.model.filter.SearchProductsFilter;
@@ -56,7 +57,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
     @Override
     public Product changePrice(Integer productId, double newPrice) {
-        Integer rowsUpdated = productCrudRepository.updatePriceById(newPrice, productId);
+        Integer rowsUpdated = productCrudRepository.updatePriceById(newPrice, DateTimeUtil.getNowUTC(), productId);
         if (rowsUpdated != 1) {
             throw new RuntimeException("Unexpected number of row(s) updated. Expected to have 1 row updated, but was " + rowsUpdated);
         }
