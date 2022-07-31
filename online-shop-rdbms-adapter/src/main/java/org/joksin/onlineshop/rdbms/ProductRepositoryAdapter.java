@@ -3,7 +3,6 @@ package org.joksin.onlineshop.rdbms;
 import lombok.AllArgsConstructor;
 import org.joksin.onlineshop.model.Product;
 import org.joksin.onlineshop.model.ProductType;
-import org.joksin.onlineshop.rdbms.entity.ManufacturerEntity;
 import org.joksin.onlineshop.rdbms.entity.ProductEntity;
 import org.joksin.onlineshop.rdbms.mapper.ProductMapper;
 import org.joksin.onlineshop.rdbms.repository.ManufacturerCrudRepository;
@@ -24,25 +23,25 @@ public class ProductRepositoryAdapter implements ProductRepository {
     @Override
     public Optional<Product> findById(Integer productId) {
         return productCrudRepository.findById(productId)
-                .map(this::mapWithManufacturer);
+                .map(this::toProductWithManufacturer);
     }
 
     @Override
     public Collection<Product> findAll() {
         Collection<ProductEntity> productEntities = Streamable.of(productCrudRepository.findAll()).toList();
-        return mapWithManufacturer(productEntities);
+        return toProductsWithManufacturer(productEntities);
     }
 
     @Override
     public Collection<Product> findAllByType(ProductType productType) {
         Collection<ProductEntity> productEntities = Streamable.of(productCrudRepository.findAll()).toList();
-        return mapWithManufacturer(productEntities);
+        return toProductsWithManufacturer(productEntities);
     }
 
     @Override
     public Collection<Product> findAllByManufacturerId(Integer manufacturerId) {
         Collection<ProductEntity> productEntities = Streamable.of(productCrudRepository.findAll()).toList();
-        return mapWithManufacturer(productEntities);
+        return toProductsWithManufacturer(productEntities);
     }
 
     @Override
@@ -58,7 +57,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
     @Override
     public Product create(Product product) {
         ProductEntity createdProductEntity = productCrudRepository.save(ProductMapper.MAPPER.toEntity(product));
-        return mapWithManufacturer(createdProductEntity);
+        return toProductWithManufacturer(createdProductEntity);
     }
 
     @Override
@@ -68,27 +67,20 @@ public class ProductRepositoryAdapter implements ProductRepository {
             throw new RuntimeException("Unexpected number of row(s) updated. Expected to have 1 row updated, but was " + rowsUpdated);
         }
 
-        Optional<Product> updatedProductOptional = findById(productId);
-        if (updatedProductOptional.isPresent()) {
-            return updatedProductOptional.get();
-        } else {
-            throw new RuntimeException("Inconsistent data: product with ID " + productId + " must exist in the database");
-        }
+        return findById(productId)
+                .orElseThrow(() -> new RuntimeException("Inconsistent data: product with ID " + productId + " must exist in the database"));
     }
 
-    private Collection<Product> mapWithManufacturer(Collection<ProductEntity> productEntities) {
+    private Collection<Product> toProductsWithManufacturer(Collection<ProductEntity> productEntities) {
         return productEntities.stream()
-                .map(this::mapWithManufacturer)
+                .map(this::toProductWithManufacturer)
                 .collect(Collectors.toList());
     }
 
-    private Product mapWithManufacturer(ProductEntity productEntity) {
-        Optional<ManufacturerEntity> manufacturerEntityOptional = manufacturerCrudRepository.findById(productEntity.getManufacturerId());
-        if (manufacturerEntityOptional.isPresent()) {
-            return ProductMapper.MAPPER.fromEntity(productEntity, manufacturerEntityOptional.get());
-        } else {
-            throw new RuntimeException("Inconsistent data: manufacturer with ID " + productEntity.getManufacturerId() + " must exist in the database");
-        }
+    private Product toProductWithManufacturer(ProductEntity productEntity) {
+        return manufacturerCrudRepository.findById(productEntity.getManufacturerId())
+                .map(manufacturerEntity -> ProductMapper.MAPPER.fromEntity(productEntity, manufacturerEntity))
+                .orElseThrow(() -> new RuntimeException("Inconsistent data: manufacturer with ID " + productEntity.getManufacturerId() + " must exist in the database"));
     }
 
 }
