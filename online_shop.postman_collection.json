@@ -263,6 +263,28 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "FIND PRODUCTS BY MANUFACTURER ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/manufacturers/9/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"manufacturers",
+						"9",
+						"products"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

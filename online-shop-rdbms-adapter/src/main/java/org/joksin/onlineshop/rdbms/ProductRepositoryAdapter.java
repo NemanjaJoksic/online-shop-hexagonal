@@ -33,7 +33,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
     @Override
     public Collection<Product> findAllByManufacturerId(Integer manufacturerId) {
-        Collection<ProductEntity> productEntities = Streamable.of(productCrudRepository.findAll()).toList();
+        Collection<ProductEntity> productEntities = Streamable.of(productCrudRepository.findAllByManufacturerId(manufacturerId)).toList();
         return toProductsWithManufacturer(productEntities);
     }
 

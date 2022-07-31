@@ -7,6 +7,8 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ProductCrudRepository extends CrudRepository<ProductEntity, Integer> {
 
+    Iterable<ProductEntity> findAllByManufacturerId(Integer manufacturerId);
+
     Boolean existsByNameAndManufacturerId(String name, Integer manufacturerId);
 
     @Modifying
