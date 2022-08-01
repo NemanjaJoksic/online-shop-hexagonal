@@ -3,19 +3,18 @@ package org.joksin.onlineshop.rdbms;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joksin.onlineshop.model.Order;
-import org.joksin.onlineshop.model.OrderItem;
 import org.joksin.onlineshop.rdbms.entity.OrderEntity;
+import org.joksin.onlineshop.rdbms.entity.OrderItemEntity;
 import org.joksin.onlineshop.rdbms.entity.mapper.OrderEntityRowMapper;
 import org.joksin.onlineshop.rdbms.mapper.OrderItemMapper;
 import org.joksin.onlineshop.rdbms.mapper.OrderMapper;
-import org.joksin.onlineshop.rdbms.repository.CustomerCrudRepository;
 import org.joksin.onlineshop.rdbms.repository.OrderCrudRepository;
 import org.joksin.onlineshop.rdbms.repository.OrderItemCrudRepository;
 import org.joksin.onlineshop.spi.persistence.OrderRepository;
 import org.jooq.DSLContext;
 import org.jooq.Query;
 import org.jooq.SelectOnConditionStep;
-import org.jooq.impl.DSL;
+import org.springframework.data.util.Streamable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
@@ -24,7 +23,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static org.jooq.impl.DSL.*;
+import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.table;
 
 @Slf4j
 @Repository
@@ -33,7 +33,6 @@ public class OrderRepositoryAdapter implements OrderRepository {
 
     private final OrderCrudRepository orderCrudRepository;
     private final OrderItemCrudRepository orderItemCrudRepository;
-    private final CustomerCrudRepository customerCrudRepository;
 
     private final JdbcTemplate jdbcTemplate;
     private final DSLContext dsl;
@@ -65,16 +64,15 @@ public class OrderRepositoryAdapter implements OrderRepository {
     @Override
     public Order create(Order order) {
         OrderEntity createdOrderEntity = orderCrudRepository.save(OrderMapper.MAPPER.toEntity(order));
-        orderItemCrudRepository.saveAll(OrderItemMapper.MAPPER.toEntities(createdOrderEntity.getId(), order.getItems()));
-        return toOrderWithCustomer(createdOrderEntity, order.getItems());
-    }
+        Collection<OrderItemEntity> orderItemEntities = OrderItemMapper.MAPPER.toEntities(createdOrderEntity.getId(), order.getItems());
+        List<OrderItemEntity> createdOrderItemEntities = Streamable.of(orderItemCrudRepository.saveAll(orderItemEntities)).toList();
+        if (createdOrderItemEntities.size() != orderItemEntities.size()) {
+            throw new RuntimeException("Number of created order items is different then provided; expected: " + orderItemEntities.size() + "; actual: " + createdOrderItemEntities.size());
+        }
 
-    private Order toOrderWithCustomer(OrderEntity orderEntity, Collection<OrderItem> orderItems) {
-        return customerCrudRepository.findById(orderEntity.getCustomerId())
-                .map(customerEntity -> OrderMapper.MAPPER.fromEntity(orderEntity, customerEntity, orderItems))
-                .orElseThrow(() -> new RuntimeException("Inconsistent data: Customer with ID " + orderEntity.getCustomerId() + " must exist in the database"));
+        return findById(createdOrderEntity.getId())
+                .orElseThrow(() -> new RuntimeException("Inconsistent data: order with ID " + createdOrderEntity.getId() + " must exist in the database"));
     }
-
 
     private SelectOnConditionStep buildSelectOrders() {
         return dsl.select(
