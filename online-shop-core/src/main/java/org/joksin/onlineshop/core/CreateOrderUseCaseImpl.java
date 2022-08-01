@@ -8,6 +8,7 @@ import org.joksin.onlineshop.model.*;
 import org.joksin.onlineshop.model.exception.ProductNotExistException;
 import org.joksin.onlineshop.spi.persistence.OrderRepository;
 import org.joksin.onlineshop.spi.persistence.ProductRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class CreateOrderUseCaseImpl implements CreateOrderUseCase {
     private final OrderRepository orderRepository;
 
     @Override
+    @Transactional
     public Order create(CreateOrderRequest createOrderRequest) {
 
         double totalPrice = 0;

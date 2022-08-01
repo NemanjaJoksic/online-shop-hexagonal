@@ -5,9 +5,30 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Component
 public class OrderEntityRowMapper {
+
+    public Collection<OrderEntity> mapToOrderEntities(SqlRowSet sqlRowSet) {
+        Map<Integer, OrderEntity> orderEntityMap = new LinkedHashMap<>();
+
+        while (sqlRowSet.next()) {
+            Integer orderId = sqlRowSet.getInt("order_id");
+            OrderEntity orderEntity = orderEntityMap.get(orderId);
+
+            if (orderEntity == null) {
+                orderEntity = fetchOrderEntity(sqlRowSet);
+                orderEntityMap.put(orderId, orderEntity);
+            }
+
+            orderEntity.getItems().add(fetchOrderItemEntity(sqlRowSet));
+        }
+
+        return orderEntityMap.values();
+    }
 
     public OrderEntity mapToOrderEntity(SqlRowSet sqlRowSet) {
         OrderEntity orderEntity = null;

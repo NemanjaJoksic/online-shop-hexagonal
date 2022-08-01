@@ -41,12 +41,38 @@ public class OrderRepositoryAdapter implements OrderRepository {
 
     @Override
     public Collection<Order> findAll() {
-        return null;
+        Query query = buildSelectOrders();
+
+        String sql = query.getSQL();
+        List<Object> bindValues = query.getBindValues();
+
+        log.info("SQL: {}", sql);
+        log.info("BindValues: {}", bindValues);
+
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql);
+        Collection<OrderEntity> orderEntities = orderEntityRowMapper.mapToOrderEntities(sqlRowSet);
+
+        return OrderMapper.MAPPER.fromEntities(orderEntities);
+    }
+
+    @Override
+    public Collection<Order> findAllByCustomerId(Integer customerId) {
+        Query query = buildSelectOrders().where(field("c.id").eq(customerId));
+
+        String sql = query.getSQL();
+        List<Object> bindValues = query.getBindValues();
+
+        log.info("SQL: {}", sql);
+        log.info("BindValues: {}", bindValues);
+
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, bindValues.toArray());
+        Collection<OrderEntity> orderEntities = orderEntityRowMapper.mapToOrderEntities(sqlRowSet);
+
+        return OrderMapper.MAPPER.fromEntities(orderEntities);
     }
 
     @Override
     public Optional<Order> findById(Integer orderId) {
-
         Query query = buildSelectOrders().where(field("o.id").eq(orderId));
 
         String sql = query.getSQL();

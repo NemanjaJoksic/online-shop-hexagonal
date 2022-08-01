@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Mapper
 public interface OrderMapper {
@@ -29,5 +30,11 @@ public interface OrderMapper {
     @Mapping(target = "customer", expression = "java(CustomerMapper.MAPPER.fromEntity(customerEntity))")
     @Mapping(target = "items", source = "orderItems")
     Order fromEntity(OrderEntity orderEntity, CustomerEntity customerEntity, Collection<OrderItem> orderItems);
+
+    default Collection<Order> fromEntities(Collection<OrderEntity> orderEntities) {
+        return orderEntities.stream()
+                .map(this::fromEntity)
+                .collect(Collectors.toList());
+    }
 
 }

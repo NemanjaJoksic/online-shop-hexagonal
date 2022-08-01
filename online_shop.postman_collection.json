@@ -107,7 +107,7 @@
 			"response": []
 		},
 		{
-			"name": "GET CUSTOMER BY ID 1",
+			"name": "FIND CUSTOMER BY ID 1",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -287,7 +287,7 @@
 			"response": []
 		},
 		{
-			"name": "FIND PRODUCTS - FILTER",
+			"name": "GET PRODUCTS - FILTER",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -329,7 +329,7 @@
 			"response": []
 		},
 		{
-			"name": "FIND PRODUCTS - FILTER 2",
+			"name": "GET PRODUCTS - FILTER 2",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -407,6 +407,48 @@
 						"api",
 						"orders",
 						"14"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET ORDERS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FIND ORDERS BY CUSTOMER_ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/customers/4/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customers",
+						"4",
+						"orders"
 					]
 				}
 			},
