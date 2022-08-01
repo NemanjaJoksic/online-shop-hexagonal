@@ -2,24 +2,42 @@ package org.joksin.onlineshop.rdbms;
 
 import commons.DateTimeUtil;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.joksin.onlineshop.model.Product;
+import org.joksin.onlineshop.model.filter.RangeValue;
 import org.joksin.onlineshop.model.filter.SearchProductsFilter;
 import org.joksin.onlineshop.rdbms.entity.ProductEntity;
+import org.joksin.onlineshop.rdbms.entity.mapper.ProductEntityRowMapper;
 import org.joksin.onlineshop.rdbms.mapper.ProductMapper;
+import org.joksin.onlineshop.rdbms.mapper.ProductTypeMapper;
 import org.joksin.onlineshop.rdbms.repository.ManufacturerCrudRepository;
 import org.joksin.onlineshop.rdbms.repository.ProductCrudRepository;
 import org.joksin.onlineshop.spi.persistence.ProductRepository;
+import org.jooq.Condition;
+import org.jooq.DSLContext;
+import org.jooq.Query;
+import org.jooq.impl.DSL;
 import org.springframework.data.util.Streamable;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.jooq.impl.DSL.field;
+
+@Slf4j
 @AllArgsConstructor
 public class ProductRepositoryAdapter implements ProductRepository {
 
     private final ProductCrudRepository productCrudRepository;
     private final ManufacturerCrudRepository manufacturerCrudRepository;
+
+    private final JdbcTemplate jdbcTemplate;
+    private final DSLContext dsl;
+
+    private final ProductEntityRowMapper productEntityRowMapper;
 
     @Override
     public Optional<Product> findById(Integer productId) {
@@ -29,7 +47,38 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
     @Override
     public Collection<Product> findAll(SearchProductsFilter searchProductsFilter) {
-        Collection<ProductEntity> productEntities = Streamable.of(productCrudRepository.findAll()).toList();
+
+        // build where cause
+        Condition where = DSL.noCondition();
+        if (searchProductsFilter.getName() != null) {
+            where = where.and(field("product.name").eq(searchProductsFilter.getName()));
+        }
+
+        if (searchProductsFilter.getTypes() != null) {
+            where = where.and(field("product.type_id").in(ProductTypeMapper.MAPPER.toIds(searchProductsFilter.getTypes())));
+        }
+
+        RangeValue<Double> priceRange = searchProductsFilter.getPriceRange();
+        if (priceRange.getFrom() != null) {
+            where = where.and(field("product.price").ge(priceRange.getFrom()));
+        }
+        if (priceRange.getTo() != null) {
+            where = where.and(field("product.price").le(priceRange.getTo()));
+        }
+
+        if (searchProductsFilter.getManufacturerIds() != null){
+            where = where.and(field("product.manufacturer_id").in(searchProductsFilter.getManufacturerIds()));
+        }
+
+        Query query = dsl.selectFrom("product").where(where);
+
+        String sql = query.getSQL();
+        List<Object> bindValues = query.getBindValues();
+
+        log.info("SQL: {}", sql);
+        log.info("BindValues: {}", bindValues);
+
+        List<ProductEntity> productEntities = jdbcTemplate.query(sql, productEntityRowMapper, bindValues.toArray());
         return toProductsWithManufacturer(productEntities);
     }
 

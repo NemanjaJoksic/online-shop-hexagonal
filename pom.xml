@@ -34,6 +34,7 @@
         <sqlite.driver.version>3.36.0.3</sqlite.driver.version>
         <postgres.driver.version>42.4.0</postgres.driver.version>
         <springdoc.version>1.6.9</springdoc.version>
+        <jooq.version>3.14.15</jooq.version>
     </properties>
 	
     <dependencyManagement>
@@ -63,6 +64,11 @@
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postgres.driver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq</artifactId>
+                <version>${jooq.version}</version>
             </dependency>
 
             <dependency>
