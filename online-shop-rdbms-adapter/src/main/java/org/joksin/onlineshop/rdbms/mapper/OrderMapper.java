@@ -19,6 +19,11 @@ public interface OrderMapper {
     @Mapping(target = "customerId", source = "order.customer.id")
     OrderEntity toEntity(Order order);
 
+    @Mapping(target = "status", expression = "java(OrderStatus.of(orderEntity.getStatusId()))")
+    @Mapping(target = "customer", expression = "java(CustomerMapper.MAPPER.fromEntity(orderEntity.getCustomer()))")
+    @Mapping(target = "items", expression = "java(OrderItemMapper.MAPPER.fromEntities(orderEntity.getItems()))")
+    Order fromEntity(OrderEntity orderEntity);
+
     @Mapping(target = "id", source = "orderEntity.id")
     @Mapping(target = "status", expression = "java(OrderStatus.of(orderEntity.getStatusId()))")
     @Mapping(target = "customer", expression = "java(CustomerMapper.MAPPER.fromEntity(customerEntity))")

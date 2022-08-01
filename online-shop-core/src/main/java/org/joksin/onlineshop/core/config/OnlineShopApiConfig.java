@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Import;
         FindManufacturerUseCaseImpl.class,
         FindManufacturersUseCaseImpl.class,
         CreateManufacturerUseCaseImpl.class,
-        CreateOrderUseCaseImpl.class
+        CreateOrderUseCaseImpl.class,
+        FindOrderUseCaseImpl.class
 })
 public class OnlineShopApiConfig {
 }

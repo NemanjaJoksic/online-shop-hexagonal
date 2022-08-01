@@ -2,13 +2,15 @@ package org.joksin.onlineshop.rdbms.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Data
-@Table("order")
+@Table("orders")
 public class OrderEntity {
 
     @Id
@@ -25,5 +27,11 @@ public class OrderEntity {
 
     @Column("customer_id")
     private Integer customerId;
+
+    @Transient
+    private CustomerEntity customer;
+
+    @Transient
+    private Collection<OrderItemEntity> items;
 
 }

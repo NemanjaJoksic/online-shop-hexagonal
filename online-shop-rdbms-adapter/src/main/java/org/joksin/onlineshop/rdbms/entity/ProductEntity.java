@@ -2,6 +2,7 @@ package org.joksin.onlineshop.rdbms.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -29,5 +30,7 @@ public class ProductEntity {
     @Column("manufacturer_id")
     private Integer manufacturerId;
 
+    @Transient
+    private ManufacturerEntity manufacturer;
 
 }

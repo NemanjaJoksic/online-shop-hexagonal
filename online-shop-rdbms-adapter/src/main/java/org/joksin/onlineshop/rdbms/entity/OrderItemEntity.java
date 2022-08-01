@@ -2,6 +2,7 @@ package org.joksin.onlineshop.rdbms.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -23,5 +24,8 @@ public class OrderItemEntity {
 
     @Column("order_id")
     private Integer orderId;
+
+    @Transient
+    private ProductEntity product;
 
 }

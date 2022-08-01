@@ -14,6 +14,15 @@ public interface OrderItemMapper {
 
     OrderItemMapper MAPPER = Mappers.getMapper(OrderItemMapper.class);
 
+    @Mapping(target = "product", expression = "java(ProductMapper.MAPPER.fromEntity(orderItemEntity.getProduct()))")
+    OrderItem fromEntity(OrderItemEntity orderItemEntity);
+
+    default Collection<OrderItem> fromEntities(Collection<OrderItemEntity> orderItemEntities) {
+        return orderItemEntities.stream()
+                .map(this::fromEntity)
+                .collect(Collectors.toList());
+    }
+
     @Mapping(target = "productId", source = "orderItem.product.id")
     @Mapping(target = "orderId", source = "orderId")
     OrderItemEntity toEntity(Integer orderId, OrderItem orderItem);

@@ -51,23 +51,23 @@ public class ProductRepositoryAdapter implements ProductRepository {
         // build where cause
         Condition where = DSL.noCondition();
         if (searchProductsFilter.getName() != null) {
-            where = where.and(field("product.name").eq(searchProductsFilter.getName()));
+            where = where.and(field("name").eq(searchProductsFilter.getName()));
         }
 
         if (searchProductsFilter.getTypes() != null) {
-            where = where.and(field("product.type_id").in(ProductTypeMapper.MAPPER.toIds(searchProductsFilter.getTypes())));
+            where = where.and(field("type_id").in(ProductTypeMapper.MAPPER.toIds(searchProductsFilter.getTypes())));
         }
 
         RangeValue<Double> priceRange = searchProductsFilter.getPriceRange();
         if (priceRange.getFrom() != null) {
-            where = where.and(field("product.price").ge(priceRange.getFrom()));
+            where = where.and(field("price").ge(priceRange.getFrom()));
         }
         if (priceRange.getTo() != null) {
-            where = where.and(field("product.price").le(priceRange.getTo()));
+            where = where.and(field("price").le(priceRange.getTo()));
         }
 
         if (searchProductsFilter.getManufacturerIds() != null){
-            where = where.and(field("product.manufacturer_id").in(searchProductsFilter.getManufacturerIds()));
+            where = where.and(field("manufacturer_id").in(searchProductsFilter.getManufacturerIds()));
         }
 
         Query query = dsl.selectFrom("product").where(where);

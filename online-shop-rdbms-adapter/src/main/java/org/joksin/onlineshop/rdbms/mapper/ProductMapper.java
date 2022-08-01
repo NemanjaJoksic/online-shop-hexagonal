@@ -12,6 +12,10 @@ public interface ProductMapper {
 
     ProductMapper MAPPER = Mappers.getMapper(ProductMapper.class);
 
+    @Mapping(target = "type", expression = "java(ProductType.of(productEntity.getTypeId()))")
+    @Mapping(target = "manufacturer", expression = "java(ManufacturerMapper.MAPPER.fromEntity(productEntity.getManufacturer()))")
+    Product fromEntity(ProductEntity productEntity);
+
     @Mapping(target = "id", source = "productEntity.id")
     @Mapping(target = "name", source = "productEntity.name")
     @Mapping(target = "type", expression = "java(ProductType.of(productEntity.getTypeId()))")
