@@ -35,7 +35,6 @@ public class ManufacturerController {
     public ResponseEntity<ManufacturerDTO> create(@RequestBody CreateManufacturerRequestDTO createManufacturerRequestDto) {
         CreateManufacturerRequest createManufacturerRequest = CreateManufacturerRequestMapper.MAPPER.fromDTO(createManufacturerRequestDto);
         Manufacturer manufacturer = createManufacturerUseCase.create(createManufacturerRequest);
-        System.out.println(manufacturer.getCountry());
         return new ResponseEntity<>(ManufacturerMapper.MAPPER.toDTO(manufacturer), HttpStatus.CREATED);
     }
 
