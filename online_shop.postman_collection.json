@@ -285,6 +285,132 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "FIND PRODUCTS - FILTER",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products?productName=cokolada&productTypeIds=1,2,3&priceFrom=10&priceTo=100&manufacturerIds=9,10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products"
+					],
+					"query": [
+						{
+							"key": "productName",
+							"value": "cokolada"
+						},
+						{
+							"key": "productTypeIds",
+							"value": "1,2,3"
+						},
+						{
+							"key": "priceFrom",
+							"value": "10"
+						},
+						{
+							"key": "priceTo",
+							"value": "100"
+						},
+						{
+							"key": "manufacturerIds",
+							"value": "9,10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FIND PRODUCTS - FILTER 2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products?productTypeIds=1,2,3,5&proceFrom=90&priceTo=100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products"
+					],
+					"query": [
+						{
+							"key": "productTypeIds",
+							"value": "1,2,3,5"
+						},
+						{
+							"key": "proceFrom",
+							"value": "90"
+						},
+						{
+							"key": "priceTo",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CREATE ORDER",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerId\": 2,\r\n    \"orderItemRequests\": [\r\n        {\r\n            \"productId\": 3,\r\n            \"quantity\": 2\r\n        },\r\n        {\r\n            \"productId\": 4,\r\n            \"quantity\": 2\r\n        },\r\n        {\r\n            \"productId\": 5,\r\n            \"quantity\": 4\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FIND ORDER BY ID ",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/orders/14",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"orders",
+						"14"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
