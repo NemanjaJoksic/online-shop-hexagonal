@@ -13,4 +13,10 @@ public class Customer {
     private final String email;
     private final Country country;
 
+    public static Customer of(Integer customerId) {
+        return Customer.builder()
+                .id(customerId)
+                .build();
+    }
+
 }

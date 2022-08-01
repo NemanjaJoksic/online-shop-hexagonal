@@ -11,7 +11,7 @@ import java.util.Collection;
 public class Order {
 
     private final Integer id;
-    private final LocalDateTime createAt;
+    private final LocalDateTime createdAt;
     private final Double totalPrice;
     private final OrderStatus status;
 

@@ -9,6 +9,7 @@ import org.joksin.onlineshop.spi.persistence.CustomerRepository;
 import org.springframework.data.util.Streamable;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -24,7 +25,7 @@ public class CustomerRepositoryAdapter implements CustomerRepository {
 
     @Override
     public Collection<Customer> findAll() {
-        Collection<CustomerEntity> customerEntities = Streamable.of(customerCrudRepository.findAll()).toList();
+        List<CustomerEntity> customerEntities = Streamable.of(customerCrudRepository.findAll()).toList();
         return CustomerMapper.MAPPER.fromEntities(customerEntities);
     }
 

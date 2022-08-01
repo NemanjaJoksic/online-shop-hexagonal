@@ -30,6 +30,28 @@ CREATE TABLE "product" (
 	PRIMARY KEY("id")
 );
 
+CREATE SEQUENCE order_id_seq;
+
+CREATE TABLE "order" (
+	"id"	INTEGER NOT NULL DEFAULT nextval('order_id_seq'),
+	"created_at"	TIMESTAMP NOT NULL,
+	"total_price"	REAL NOT NULL,
+	"status_id"	INTEGER NOT NULL,
+	"customer_id"	INTEGER NOT NULL,
+	PRIMARY KEY("id")
+);
+
+CREATE SEQUENCE order_item_id_seq;
+
+CREATE TABLE "order_item" (
+	"id"	INTEGER NOT NULL DEFAULT nextval('order_item_id_seq'),
+	"quantity"	INTEGER NOT NULL,
+	"total_price"	REAL NOT NULL,
+	"product_id"	INTEGER NOT NULL,
+	"order_id"  INTEGER NOT NULL,
+	PRIMARY KEY("id")
+);
+
 --drop table customer ;
 --drop table manufacturer ;
 --drop table product ;
