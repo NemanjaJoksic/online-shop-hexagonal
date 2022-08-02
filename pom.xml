@@ -25,6 +25,7 @@
         <module>online-shop-rdbms-adapter</module>
         <module>online-shop-utilities</module>
         <module>application</module>
+        <module>online-shop-email-adapter</module>
     </modules>
 	
     <properties>
@@ -99,6 +100,11 @@
             <dependency>
                 <groupId>org.joksin</groupId>
                 <artifactId>online-shop-rdbms-adapter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.joksin</groupId>
+                <artifactId>online-shop-email-adapter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

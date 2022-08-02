@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import org.joksin.onlineshop.api.CreateOrderUseCase;
 import org.joksin.onlineshop.api.request.CreateOrderRequest;
 import org.joksin.onlineshop.model.*;
+import org.joksin.onlineshop.model.event.OrderCreatedEvent;
 import org.joksin.onlineshop.model.exception.ProductNotExistException;
 import org.joksin.onlineshop.spi.persistence.OrderRepository;
 import org.joksin.onlineshop.spi.persistence.ProductRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
@@ -18,6 +20,8 @@ public class CreateOrderUseCaseImpl implements CreateOrderUseCase {
 
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
+
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
@@ -53,7 +57,11 @@ public class CreateOrderUseCaseImpl implements CreateOrderUseCase {
                 .items(orderItems)
                 .build();
 
-        return orderRepository.create(order);
+        Order createdOrder = orderRepository.create(order);
+
+        eventPublisher.publishEvent(new OrderCreatedEvent(createdOrder));
+
+        return createdOrder;
     }
 
 }
